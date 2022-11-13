@@ -33,7 +33,7 @@ const ProductListScreen = {
     });
   },
   render: async () => {
-    const products = await getProducts();
+    const products = await getProducts({});
     return `
     <div class="dashboard">
     ${DashboardMenu.render({ selected: 'products' })}
