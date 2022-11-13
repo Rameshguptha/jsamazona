@@ -151,7 +151,7 @@ const OrderScreen = {
                     </div>
                     <div> Qty: ${item.qty} </div>
                   </div>
-                  <div class="cart-price"> $${item.price}</div>
+                  <div class="cart-price"> Rs.${item.price}</div>
                 </li>
                 `
                 )
@@ -164,10 +164,10 @@ const OrderScreen = {
                 <li>
                   <h2>Order Summary</h2>
                  </li>
-                 <li><div>Items</div><div>$${itemsPrice}</div></li>
-                 <li><div>Shipping</div><div>$${shippingPrice}</div></li>
-                 <li><div>Tax</div><div>$${taxPrice}</div></li>
-                 <li class="total"><div>Order Total</div><div>$${totalPrice}</div></li>                  
+                 <li><div>Items</div><div>Rs.${itemsPrice}</div></li>
+                 <li><div>Shipping</div><div>Rs.${shippingPrice}</div></li>
+                 <li><div>Tax</div><div>Rs.${taxPrice}</div></li>
+                 <li class="total"><div>Order Total</div><div>Rs.${totalPrice}</div></li>                  
                  <li><div class="fw" id="paypal-button"></div></li>
                  <li>
                  ${
