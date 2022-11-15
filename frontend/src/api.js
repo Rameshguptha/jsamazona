@@ -207,10 +207,14 @@ export const forgotPwdValidate = async ({token}) => {
 export const setPwd = async ({nPassword,cPassword}) => {
   try {
     const response = await axios({
-      url: `${apiUrl}/api/users/forgotPassword/${email}/${token}`,
+      url: `${apiUrl}/api/users/forgotPassword/${email}`,
       method: 'POST',
       header: {
         'Content-Type': 'application/json',
+      },
+      data: {
+        nPassword,
+        cPassword
       },
     });
     if (response.statusText !== 'OK') {

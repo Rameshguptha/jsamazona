@@ -17,6 +17,7 @@ import ProductEditScreen from './srceens/ProductEditScreen';
 import OrderListScreen from './srceens/OrderListScreen';
 import ForgotPasswordScreen from './srceens/forgotPasswordScreen';
 import ForgotPasswordValidateScreen from './srceens/forgotPasswordValidateScreen';
+import SetPwdScreen from './srceens/setPwdScreen';
 
 import Aside from './components/Aside';
 
@@ -29,7 +30,8 @@ const routes = {
   '/cart': CartScreen,
   '/signin': SigninScreen,
   '/forgot':ForgotPasswordScreen,
-  '/forgotvalidate':ForgotPasswordValidateScreen,
+  '/forgotvalidate/:email':ForgotPasswordValidateScreen,
+  '/setpwd/:email':SetPwdScreen,
   '/register': RegisterScreen,
   '/profile': ProfileScreen,
   '/shipping': ShippingScreen,

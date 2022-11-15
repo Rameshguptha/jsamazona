@@ -4,6 +4,7 @@ import { showLoading, hideLoading, showMessage, redirectUser } from '../utils';
 
 const SigninScreen = {
   after_render: () => {
+  const request=parseRequestUrl()
     document
       .getElementById('pwdv-form')
       .addEventListener('submit', async (e) => {
