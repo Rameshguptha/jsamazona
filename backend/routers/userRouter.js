@@ -153,10 +153,6 @@ userRouter.post('/forgotPassword/:email/:token',async(req,res)=>{
 
   const email=req.params.email;
   const token=req.params.token?parseInt(req.params.token):null;
-  const nPassword=req.body.nPassword;
-  const vPassword=req.body.vpassword;
-
-
   let user=await User.findOne({email:email})
   if(!user)
   {
@@ -176,16 +172,34 @@ userRouter.post('/forgotPassword/:email/:token',async(req,res)=>{
     return res.status(500).send("incorrect token")
   }
 
-  User.updateOne({email:email},{$set:{password:nPassword,forgotPasswordExpiry:undefined,forgotPasswordToken:undefined}})
-  .then((d)=>{
-    console.log(d)
-    res.status(200).send("password updated succesfully")
-
-  })
-  .catch((err)=>{
-    res.send({msg:"error in updating password"})
-  })
+  await User.updateOne({email:email},{$set:{forgotPasswordToken:null,forgotPasswordExpiry:null}})
+  res.status(200).send("token verified succesfully")
   
+})
+
+userRouter.post('/setPassword/:email',async(req,res)=>{
+  try {
+    const email=req.params.email;
+    const nPassword=req.body.nPassword;
+    const cPassword=req.body.cPassword;
+    if(nPassword!=cPassword)
+    {
+      return res.status(422).send({msg:"password and confirm password not matched"})
+    }
+
+    User.updateOne({email:email},{$set:{password:nPassword}})
+    .then(()=>{
+      res.status(200).send({msg:"password updated succesfully"})
+    })
+    .catch((err)=>{
+      res.status(500).send({msg:"error in updating password succesfully"})
+    })
+
+    
+    
+  } catch (error) {
+    res.status(500).send({msg:error})
+  }
 })
 
 export default userRouter;
