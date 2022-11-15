@@ -101,42 +101,52 @@ userRouter.put(
 userRouter.post("/forgotPassword/:email",async(req,res)=>{
   const email=req.params.email;
 
-  const user=await User.findOne({email:email})
+  User.findOne({email:email})
+  .then((userData)=>{
+    if(!userData || !userData._doc)
+    {
+      return res.status(500).send({msg:"user not found please register"})
+    }
+    userData=userData._doc
 
-  const val = Math.floor(100000 + Math.random() * 900000);
+    const val = Math.floor(100000 + Math.random() * 900000);
+
+    User.updateOne({email:email},{$set:{
+      forgotPasswordToken:val,forgotPasswordExpiry:moment().add(1,'hour').toDate()
+    }}).then(()=>{
+      try {
+        let options={}
+    
+        options.reciever=email;
+        options.subject="Password reset code for jsamazona";
+        options.text=`Hi, Mr/Mrs ${userData.name} This is your code ${val} to reset your password.<br>Plase enter this code on the page`
+    
+        emailHelper.mailhelper(options)
+        .then((result)=>{
+    
+          console.log("message sent",result.messageId);
+    
+          res.send("email sent succesfully")
+        })
+        .catch((error)=>{
+          res.send(error)
+        })
   
-  user.forgotPasswordToken=val;
-  user.forgotPasswordExpiry=moment().add(1,'hour').toDate()
-  console.log(user.forgotPasswordExpiry)
-  await user.save()
-  const message=`This is ur password reset token ${val}`
-
-  try {
-
-
-    let options={}
-
-    options.reciever=email;
-    options.subject="Password reset code for jsamazona";
-    options.text=`Hi, Mr/Mrs ${user.name} This is your code ${val} to reset your password.<br>Plase enter this code on the page`
-
-    emailHelper.mailhelper(options)
-    .then((result)=>{
-
-      console.log("message sent",result.messageId);
-
-      res.send("email sent succesfully")
+      } catch (error) {
+        res.send({msg:"error while sending token via email"})
+      }
     })
-    .catch((error)=>{
-      res.send(error)
+    .catch((err)=>{
+      res.status(500).send({msg:"error in generating token"})
     })
 
+  })
+  .catch((error)=>{
+    res.status(500).send({msg:error})
+  })
 
-  } catch (error) {
-    res.send({msg:"error while sending token via email"})
-  }
-
-
+  
+ 
 })
 
 userRouter.post('/forgotPassword/:email/:token',async(req,res)=>{
@@ -166,7 +176,7 @@ userRouter.post('/forgotPassword/:email/:token',async(req,res)=>{
     return res.status(500).send("incorrect token")
   }
 
-  User.updateOne({email:email},{$set:{password:nPassword,forgotPasswordExpiry:null,forgotPasswordToken:null}})
+  User.updateOne({email:email},{$set:{password:nPassword,forgotPasswordExpiry:undefined,forgotPasswordToken:undefined}})
   .then((d)=>{
     console.log(d)
     res.status(200).send("password updated succesfully")
