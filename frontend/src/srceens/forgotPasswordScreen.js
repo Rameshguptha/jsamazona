@@ -19,7 +19,31 @@ const forgotPwdScreen = {
         } else {
           setUserInfo(data);
         //   redirectUser();
-        document.location.hash = '/forgotvalidate';
+
+        document.getElementById('fpdv-form')
+        .addEventListener('submit',async (e)=>{
+            e.preventDefault();
+            showLoading();
+
+            const data = await forgotPwdGen({
+                email: document.getElementById('email').value,
+              //   password: document.getElementById('password').value,
+              });
+              hideLoading();
+
+              if(data.error)
+              {
+                showMessage(data.error)
+              }
+              else{
+                setUserInfo(data);
+                document.location.hash = '/forgotvalidate';
+
+
+              }
+
+        })
+
 
         }
       });
@@ -56,6 +80,22 @@ const forgotPwdScreen = {
           </li>
         </ul>
       </form>
+
+      <form id="fpdv-form">
+        <ul class="form-items">
+          <li>
+            <h1>Enter your OTP</h1>
+          </li>
+          <li>
+            <label for="token">OTP</label>
+            <input type="token" name="token" id="token" />
+          </li>
+          <li>
+            <button type="submit" class="primary">Verify Otp</button>
+          </li>
+        </ul>
+      </form>
+
     </div>
     `;
   },

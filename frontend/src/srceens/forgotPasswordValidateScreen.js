@@ -1,17 +1,17 @@
-import { signin } from '../api';
+import { forgotPwdValidate } from '../api';
 import { getUserInfo, setUserInfo } from '../localStorage';
 import { showLoading, hideLoading, showMessage, redirectUser } from '../utils';
 
 const SigninScreen = {
   after_render: () => {
     document
-      .getElementById('signin-form')
+      .getElementById('pwdv-form')
       .addEventListener('submit', async (e) => {
         e.preventDefault();
         showLoading();
-        const data = await signin({
-          email: document.getElementById('email').value,
-          password: document.getElementById('password').value,
+        const data = await forgotPwdValidate({
+        //   email: document.getElementById('email').value,
+            token:document.getElementById('token').value,
         });
         hideLoading();
         if (data.error) {
@@ -28,32 +28,18 @@ const SigninScreen = {
     }
     return `
     <div class="form-container">
-      <form id="signin-form">
+      <form id="pwdv-form">
         <ul class="form-items">
           <li>
-            <h1>Sign-In</h1>
+            <h1>Enter Your OTP</h1>
+          </li>
+
+          <li>
+            <label for="token">Token</label>
+            <input type="Number" name="token" id="token" />
           </li>
           <li>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" />
-          </li>
-          <li>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" />
-          </li>
-          <li>
-            <button type="submit" class="primary">Signin</button>
-          </li>
-          <li>
-            <div>
-              New User?
-              <a href="/#/register">Create your account </a>
-            </div>
-            <div>
-            Forgot Password?
-            
-            <a href="/#/forgot">Click Here</a>
-            </div>
+            <button type="submit" class="primary">Verify Code</button>
           </li>
         </ul>
       </form>
