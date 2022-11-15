@@ -1,24 +1,26 @@
-import { signin } from '../api';
+import { forgotPwdGen } from '../api';
 import { getUserInfo, setUserInfo } from '../localStorage';
 import { showLoading, hideLoading, showMessage, redirectUser } from '../utils';
 
-const SigninScreen = {
+const forgotPwdScreen = {
   after_render: () => {
     document
-      .getElementById('signin-form')
+      .getElementById('fpd-form')
       .addEventListener('submit', async (e) => {
         e.preventDefault();
         showLoading();
-        const data = await signin({
+        const data = await forgotPwdGen({
           email: document.getElementById('email').value,
-          password: document.getElementById('password').value,
+        //   password: document.getElementById('password').value,
         });
         hideLoading();
         if (data.error) {
           showMessage(data.error);
         } else {
           setUserInfo(data);
-          redirectUser();
+        //   redirectUser();
+        document.location.hash = '/forgotvalidate';
+
         }
       });
   },
@@ -28,21 +30,18 @@ const SigninScreen = {
     }
     return `
     <div class="form-container">
-      <form id="signin-form">
+      <form id="fpd-form">
         <ul class="form-items">
           <li>
-            <h1>Sign-In</h1>
+            <h1>Enter your Email</h1>
           </li>
           <li>
             <label for="email">Email</label>
             <input type="email" name="email" id="email" />
           </li>
+
           <li>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" />
-          </li>
-          <li>
-            <button type="submit" class="primary">Signin</button>
+            <button type="submit" class="primary">Click Here To Send Otp</button>
           </li>
           <li>
             <div>
@@ -52,7 +51,7 @@ const SigninScreen = {
             <div>
             Forgot Password?
             
-            <a href="/#/forgot">Click Here</a>
+            <a href="/#/forgotvalidate">Click Here hhh</a>
             </div>
           </li>
         </ul>
@@ -61,4 +60,4 @@ const SigninScreen = {
     `;
   },
 };
-export default SigninScreen;
+export default forgotPwdScreen;
