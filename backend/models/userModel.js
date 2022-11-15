@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema({
   },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, required: true, default: false },
+  forgotPasswordToken:{
+    type:Number,
+
+  },
+  forgotPasswordExpiry:{
+    type:Date
+  }
 });
 const User = mongoose.model('User', userSchema);
 export default User;

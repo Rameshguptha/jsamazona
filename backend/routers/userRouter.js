@@ -1,7 +1,10 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel';
+import moment from 'moment';
 import { generateToken, isAuth } from '../utils';
+
+import emailHelper from '../emailHelper'
 
 const userRouter = express.Router();
 
@@ -93,4 +96,86 @@ userRouter.put(
     }
   })
 );
+
+
+userRouter.post("/forgotPassword/:email",async(req,res)=>{
+  const email=req.params.email;
+
+  const user=await User.findOne({email:email})
+
+  const val = Math.floor(100000 + Math.random() * 900000);
+  
+  user.forgotPasswordToken=val;
+  user.forgotPasswordExpiry=moment().add(1,'hour').toDate()
+  console.log(user.forgotPasswordExpiry)
+  await user.save()
+  const message=`This is ur password reset token ${val}`
+
+  try {
+
+
+    let options={}
+
+    options.reciever=email;
+    options.subject="Password reset code for jsamazona";
+    options.text=`Hi, Mr/Mrs ${user.name} This is your code ${val} to reset your password.<br>Plase enter this code on the page`
+
+    emailHelper.mailhelper(options)
+    .then((result)=>{
+
+      console.log("message sent",result.messageId);
+
+      res.send("email sent succesfully")
+    })
+    .catch((error)=>{
+      res.send(error)
+    })
+
+
+  } catch (error) {
+    res.send({msg:"error while sending token via email"})
+  }
+
+
+})
+
+userRouter.post('/forgotPassword/:email/:token',async(req,res)=>{
+
+  const email=req.params.email;
+  const token=req.params.token?parseInt(req.params.token):null;
+  const nPassword=req.body.nPassword;
+  const vPassword=req.body.vpassword;
+
+
+  let user=await User.findOne({email:email})
+  if(!user)
+  {
+    return res.status(422).send("invalid user")
+  }
+
+  if(user.forgotPasswordExpiry && user.forgotPasswordExpiry<moment().toDate())
+  {
+    return res.status(200).send("token expired re-generate the token")
+  }
+  if(!user.forgotPasswordToken)
+  {
+    return res.status(422).send({msg:"please re-generate your reset password token"})
+  }
+  if(user.forgotPasswordToken!=token)
+  {
+    return res.status(500).send("incorrect token")
+  }
+
+  User.updateOne({email:email},{$set:{password:nPassword,forgotPasswordExpiry:null,forgotPasswordToken:null}})
+  .then((d)=>{
+    console.log(d)
+    res.status(200).send("password updated succesfully")
+
+  })
+  .catch((err)=>{
+    res.send({msg:"error in updating password"})
+  })
+  
+})
+
 export default userRouter;
