@@ -168,6 +168,64 @@ export const signin = async ({ email, password }) => {
     return { error: err.response.data.message || err.message };
   }
 };
+export const forgotPwdGen = async ({ email}) => {
+  try {
+    const response = await axios({
+      url: `${apiUrl}/api/users/forgotPassword/${email}`,
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.statusText !== 'OK') {
+      throw new Error(response.data.message);
+    }
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return { error: err.response.data.message || err.message };
+  }
+};
+export const forgotPwdValidate = async ({token,email}) => {
+  try {
+    const response = await axios({
+      url: `${apiUrl}/api/users/forgotPassword/${email}/${token}`,
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.statusText !== 'OK') {
+      throw new Error(response.data.message);
+    }
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return { error: err.response.data.message || err.message };
+  }
+};
+export const setPwd = async ({email,nPassword,cPassword}) => {
+  try {
+    const response = await axios({
+      url: `${apiUrl}/api/users/setPassword/${email}`,
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        nPassword,
+        cPassword
+      },
+    });
+    if (response.statusText !== 'OK') {
+      throw new Error(response.data.message);
+    }
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return { error: err.response.data.message || err.message };
+  }
+};
 export const register = async ({ name, email, password }) => {
   try {
     const response = await axios({
