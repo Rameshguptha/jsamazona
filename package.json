@@ -9,7 +9,6 @@
     "serve": "node dist/server.js",
     "heroku-prebuild": "cd frontend && npm install --dev"
   },
-
   "author": "rameshGuptha",
   "license": "ISC",
   "dependencies": {
