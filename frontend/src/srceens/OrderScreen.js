@@ -44,7 +44,7 @@ const handlePayment = (clientId, totalPrice) => {
             {
               amount: {
                 total: totalPrice,
-                currency: 'USD',
+                currency: 'EUR',
               },
             },
           ],

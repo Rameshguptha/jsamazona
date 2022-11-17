@@ -34,19 +34,9 @@ const PaymentScreen = {
               id="paypal"
               value="Paypal"
               checked />
-              <label for="paypal" >PayPal</label>
+              <label for="paypal" >Payment</label>
              </div> 
-          </li>
-          <li>
-          <div>
-            <input type="radio"
-            name="payment-method"
-            id="stripe"
-            value="Stripe"
-             />
-            <label for="stripe" >Stripe</label>
-           </div> 
-        </li>
+          </li>         
           <li>
             <button type="submit" class="primary">Continue</button>
           </li>        
