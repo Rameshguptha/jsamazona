@@ -186,7 +186,7 @@ export const forgotPwdGen = async ({ email}) => {
     return { error: err.response.data.message || err.message };
   }
 };
-export const forgotPwdValidate = async ({token}) => {
+export const forgotPwdValidate = async ({token,email}) => {
   try {
     const response = await axios({
       url: `${apiUrl}/api/users/forgotPassword/${email}/${token}`,
@@ -204,10 +204,10 @@ export const forgotPwdValidate = async ({token}) => {
     return { error: err.response.data.message || err.message };
   }
 };
-export const setPwd = async ({nPassword,cPassword}) => {
+export const setPwd = async ({email,nPassword,cPassword}) => {
   try {
     const response = await axios({
-      url: `${apiUrl}/api/users/forgotPassword/${email}`,
+      url: `${apiUrl}/api/users/setPassword/${email}`,
       method: 'POST',
       header: {
         'Content-Type': 'application/json',

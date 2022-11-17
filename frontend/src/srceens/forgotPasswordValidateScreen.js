@@ -1,6 +1,6 @@
 import { forgotPwdValidate } from '../api';
 import { getUserInfo, setUserInfo } from '../localStorage';
-import { showLoading, hideLoading, showMessage, redirectUser } from '../utils';
+import { showLoading, hideLoading, showMessage, redirectUser,parseRequestUrl } from '../utils';
 
 const SigninScreen = {
   after_render: () => {
@@ -10,16 +10,19 @@ const SigninScreen = {
       .addEventListener('submit', async (e) => {
         e.preventDefault();
         showLoading();
+        const email=request.id;
         const data = await forgotPwdValidate({
         //   email: document.getElementById('email').value,
             token:document.getElementById('token').value,
+            email
         });
         hideLoading();
         if (data.error) {
           showMessage(data.error);
         } else {
           setUserInfo(data);
-          redirectUser();
+          // redirectUser();
+          document.location.hash=`/setpwd/:${email}`
         }
       });
   },
