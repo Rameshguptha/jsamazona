@@ -9,16 +9,9 @@
     "serve": "node dist/server.js",
     "heroku-prebuild": "cd frontend && npm install --dev"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/basir/node-javascript-ecommerce.git"
-  },
-  "author": "",
+
+  "author": "rameshGuptha",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/basir/node-javascript-ecommerce/issues"
-  },
-  "homepage": "https://github.com/basir/node-javascript-ecommerce#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
